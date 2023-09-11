@@ -22,7 +22,8 @@ Counting word frequencies using arrays or data structures like HashMap.
 Handling punctuation and case sensitivity.
 Sorting and displaying the word frequencies in descending order.
 
-        Sample input and output
+Sample input and output:
+
 Please enter the text to analyze (or type 'exit' to quit):
 This is a simple text. This is a sample text for word frequency analysis.
 Frequency of each word:
@@ -39,9 +40,7 @@ Frequency of each word:
 
  */
 
-
-
-import java.util.*;
+import java.util.Scanner;
 
 public class WordFrequencyCounter {
     public static void main(String[] args) {
@@ -67,19 +66,52 @@ public class WordFrequencyCounter {
         String[] words = inputText.replaceAll("[^a-zA-Z ]", "").toLowerCase().split("\\s+");
 
         // Count word frequencies
-        Map<String, Integer> wordFrequency = new HashMap<>();
+        String[] uniqueWords = new String[words.length];
+        int[] wordCounts = new int[words.length];
+        int uniqueWordCount = 0;
+
         for (String word : words) {
-            wordFrequency.put(word, wordFrequency.getOrDefault(word, 0) + 1);
+            boolean isUnique = true;
+
+            for (int i = 0; i < uniqueWordCount; i++) {
+                if (uniqueWords[i].equals(word)) {
+                    wordCounts[i]++;
+                    isUnique = false;
+                    break;
+                }
+            }
+
+            if (isUnique) {
+                uniqueWords[uniqueWordCount] = word;
+                wordCounts[uniqueWordCount] = 1;
+                uniqueWordCount++;
+            }
         }
 
         // Sort word frequencies in descending order
-        List<Map.Entry<String, Integer>> sortedWordFrequency = new ArrayList<>(wordFrequency.entrySet());
-        sortedWordFrequency.sort((a, b) -> b.getValue().compareTo(a.getValue()));
+        for (int i = 0; i < uniqueWordCount - 1; i++) {
+            for (int j = i + 1; j < uniqueWordCount; j++) {
+                if (wordCounts[i] < wordCounts[j]) {
+                    // Swap word frequencies
+                    int tempCount = wordCounts[i];
+                    wordCounts[i] = wordCounts[j];
+                    wordCounts[j] = tempCount;
+
+                    // Swap corresponding words
+                    String tempWord = uniqueWords[i];
+                    uniqueWords[i] = uniqueWords[j];
+                    uniqueWords[j] = tempWord;
+                }
+            }
+        }
 
         // Display word frequencies
         System.out.println("\nFrequency of each word:");
-        for (Map.Entry<String, Integer> entry : sortedWordFrequency) {
-            System.out.println("- " + entry.getKey() + ": " + entry.getValue());
+        for (int i = 0; i < uniqueWordCount; i++) {
+            System.out.println("- " + uniqueWords[i] + ": " + wordCounts[i]);
         }
     }
 }
+
+
+
