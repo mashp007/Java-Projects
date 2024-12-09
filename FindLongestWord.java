@@ -6,7 +6,7 @@
 
 
 String[] words = sentence.split(" ");
-
+   
 
 4. The program then initializes two variables: `maxLength` and `longestWord`. `maxLength` stores the length of the longest word in the sentence. `longestWord` stores the actual longest word in the sentence.
 
